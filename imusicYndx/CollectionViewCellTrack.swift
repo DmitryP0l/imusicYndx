@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CollectionViewCellTrack: UICollectionViewCell {
+final class CollectionViewCellTrack: UICollectionViewCell {
     
     static let identifier = "CollectionViewCellTrack"
     
@@ -16,8 +16,8 @@ class CollectionViewCellTrack: UICollectionViewCell {
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(systemName: "hifispeaker")
-        imageView.layer.cornerRadius = 4
+        imageView.image = UIImage(named: "gramophone")
+        imageView.layer.cornerRadius = 8
         return imageView
     }()
     
