@@ -6,9 +6,53 @@
 //
 
 import UIKit
+import AVFoundation
+
 
 final class ViewController: UIViewController {
 
+    var player: AVAudioPlayer!
+
+
+     func playSound() {
+         guard let url = Bundle.main.url(forResource: "A" , withExtension: "wav") else { return }
+         player = try! AVAudioPlayer(contentsOf: url)
+         player.play()
+     }
+    
+    
+    
+//    func playSound() {
+//        // Load a local sound file
+//        guard let soundFileURL = Bundle.main.url(
+//            forResource: "blackbirdFoggyNight",
+//            withExtension: "mp3"
+//        ) else {
+//            return
+//        }
+//
+//        do {
+//            // Configure and activate the AVAudioSession
+//            try AVAudioSession.sharedInstance().setCategory(
+//                AVAudioSession.Category.soloAmbient
+//            )
+//
+//            try AVAudioSession.sharedInstance().setActive(true)
+//
+//            // Play a sound
+//            let player = try AVAudioPlayer(
+//                contentsOf: soundFileURL
+//            )
+//
+//            player.play()
+//        }
+//        catch {
+//            // Handle error
+//        }
+//    }
+    
+    
+    
     private let collectionView: UICollectionView = {
         
        let layout = UICollectionViewFlowLayout()
@@ -78,27 +122,27 @@ final class ViewController: UIViewController {
     
     private let backwardButton: UIButton = {
         let button = UIButton()
-        button.backgroundColor = .green
-        //button.imageView = UIImageView(image: UIImage(systemName: "backward"))
-        button.target(forAction: #selector(backwardButtonAction), withSender: .none)
+        button.backgroundColor = .white
+        button.setImage(UIImage(systemName: "backward"), for: .normal)
+        button.addTarget(Any?.self, action: #selector(backwardButtonAction), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private let playButton: UIButton = {
-        let button = UIButton()
+        let button = UIButton(type: .system)
         button.backgroundColor = .white
-        //button.imageView = UIImageView(image: UIImage(systemName: "play"))
-        button.target(forAction: #selector(playButtonAction), withSender: .none)
+        button.setImage(UIImage(systemName: "play"), for: .normal)
+        button.addTarget(Any?.self, action: #selector(playButtonAction), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private let forwardButton: UIButton = {
         let button = UIButton(type: .system) //?
-        button.backgroundColor = .red
-        //button.imageView = UIImageView(image: UIImage(systemName: "forward"))
-        button.target(forAction: #selector(forwardButtonAction), withSender: .none)
+        button.backgroundColor = .white
+        button.setImage(UIImage(systemName: "forward"), for: .normal)
+        button.addTarget(Any?.self, action: #selector(forwardButtonAction), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -169,12 +213,18 @@ final class ViewController: UIViewController {
         
         playButton.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 100).isActive = true
         playButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        playButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
+        playButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         
         backwardButton.trailingAnchor.constraint(equalTo: playButton.leadingAnchor, constant: -50).isActive = true
         backwardButton.centerYAnchor.constraint(equalTo: playButton.centerYAnchor).isActive = true
+        backwardButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        backwardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
         
         forwardButton.leadingAnchor.constraint(equalTo: playButton.trailingAnchor, constant: 50).isActive = true
         forwardButton.centerYAnchor.constraint(equalTo: playButton.centerYAnchor).isActive = true
+        forwardButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        forwardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
     }
     
     @objc func backwardButtonAction() {
@@ -183,12 +233,14 @@ final class ViewController: UIViewController {
     
     @objc func playButtonAction() {
         print("play")
+        playSound()
+        
+        
     }
     
     @objc func forwardButtonAction() {
-        print("play")
+        print("forward")
     }
-    
 }
 
 
