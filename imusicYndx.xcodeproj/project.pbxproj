@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0A45D1DC28C7E59300E16B48 /* A.wav in Resources */ = {isa = PBXBuildFile; fileRef = 0A45D1DB28C7E59300E16B48 /* A.wav */; };
+		0A45D1E028CA8F4600E16B48 /* blackbird-lonely-bird.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A45D1DF28CA8F4500E16B48 /* blackbird-lonely-bird.mp3 */; };
+		0A45D1E228CA8F6100E16B48 /* blackbird-trapped.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A45D1E128CA8F6100E16B48 /* blackbird-trapped.mp3 */; };
 		0AEED1DE28C4BFC200CC22E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEED1DD28C4BFC200CC22E2 /* AppDelegate.swift */; };
 		0AEED1E028C4BFC200CC22E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEED1DF28C4BFC200CC22E2 /* SceneDelegate.swift */; };
 		0AEED1E228C4BFC200CC22E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEED1E128C4BFC200CC22E2 /* ViewController.swift */; };
@@ -19,6 +21,8 @@
 
 /* Begin PBXFileReference section */
 		0A45D1DB28C7E59300E16B48 /* A.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; name = A.wav; path = ../../../A.wav; sourceTree = "<group>"; };
+		0A45D1DF28CA8F4500E16B48 /* blackbird-lonely-bird.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "blackbird-lonely-bird.mp3"; sourceTree = "<group>"; };
+		0A45D1E128CA8F6100E16B48 /* blackbird-trapped.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "blackbird-trapped.mp3"; sourceTree = "<group>"; };
 		0AEED1DA28C4BFC200CC22E2 /* imusicYndx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imusicYndx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEED1DD28C4BFC200CC22E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0AEED1DF28C4BFC200CC22E2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +70,8 @@
 				0AEED1E328C4BFC200CC22E2 /* Main.storyboard */,
 				0AEED1EB28C4BFC600CC22E2 /* Info.plist */,
 				0A45D1DB28C7E59300E16B48 /* A.wav */,
+				0A45D1DF28CA8F4500E16B48 /* blackbird-lonely-bird.mp3 */,
+				0A45D1E128CA8F6100E16B48 /* blackbird-trapped.mp3 */,
 			);
 			path = imusicYndx;
 			sourceTree = "<group>";
@@ -141,7 +147,9 @@
 			files = (
 				0AEED1EA28C4BFC600CC22E2 /* LaunchScreen.storyboard in Resources */,
 				0AEED1E728C4BFC600CC22E2 /* Assets.xcassets in Resources */,
+				0A45D1E228CA8F6100E16B48 /* blackbird-trapped.mp3 in Resources */,
 				0A45D1DC28C7E59300E16B48 /* A.wav in Resources */,
+				0A45D1E028CA8F4600E16B48 /* blackbird-lonely-bird.mp3 in Resources */,
 				0AEED1E528C4BFC200CC22E2 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

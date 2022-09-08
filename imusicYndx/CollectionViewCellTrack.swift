@@ -10,13 +10,13 @@ import UIKit
 final class CollectionViewCellTrack: UICollectionViewCell {
     
     static let identifier = "CollectionViewCellTrack"
+
     
-    private let imageView: UIImageView = {
+    var imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
-        imageView.image = UIImage(named: "gramophone")
         imageView.layer.cornerRadius = 8
         return imageView
     }()
@@ -30,7 +30,6 @@ final class CollectionViewCellTrack: UICollectionViewCell {
         imageView.topAnchor.constraint(equalTo: contentView.topAnchor).isActive = true
         imageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor).isActive = true
         imageView.backgroundColor = .lightGray
-        
     }
     
     required init?(coder: NSCoder) {
