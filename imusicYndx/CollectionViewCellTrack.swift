@@ -11,7 +11,6 @@ final class CollectionViewCellTrack: UICollectionViewCell {
     
     static let identifier = "CollectionViewCellTrack"
 
-    
     var imageView: UIImageView = {
        let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false

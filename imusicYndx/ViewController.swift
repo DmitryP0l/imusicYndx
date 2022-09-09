@@ -12,22 +12,10 @@ import AVKit
 
 final class ViewController: UIViewController {
     
-    
     private var dataSourceTracks: [Track] = [Track(trackName: "1", cover: "pic1", artist: "first", fileName:     "blackbird-lonely-bird"),
                                              Track(trackName: "2", cover: "pic2", artist: "second", fileName: "blackbird-trapped"),
                                              Track(trackName: "3", cover: "pic3", artist: "third", fileName: "blackbird-lonely-bird"),
                                              Track(trackName: "4", cover: "pic4", artist: "fourth", fileName: "blackbird-trapped")]
-    
-    
-    
-    var currentTrack: Track? {
-        didSet {
-            nameTrackLabel.text = currentTrack?.trackName
-            artistTrackLabel.text = currentTrack?.artist
-            playTrack(named: currentTrack?.fileName)
-        }
-    }
-    
     
     private let player: AVPlayer = {
         let player = AVPlayer()
@@ -35,43 +23,13 @@ final class ViewController: UIViewController {
         return player
     }()
     
-    
-    
-    // time
-    private func observePlayerCurrentTime() {
-        let interval = CMTimeMake(value: 1, timescale: 2)
-        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
-            self?.currentTimeLabel.text = time.toDisplayString()
-            
-            let durationTime = self?.player.currentItem?.duration
-            let currentDurationTimeText = ((durationTime ?? CMTimeMake(value: 1, timescale: 1)) - time).toDisplayString()
-            self?.allTimeLabel.text = "-\(currentDurationTimeText)"
-            self?.updateCurrentTimeSlider()
+    private var currentTrack: Track? {
+        didSet {
+            nameTrackLabel.text = currentTrack?.trackName
+            artistTrackLabel.text = currentTrack?.artist
+            playTrack(named: currentTrack?.fileName)
         }
     }
-    
-    // slider
-    private func updateCurrentTimeSlider() {
-        let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
-        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale:  1))
-        let percentage = currentTimeSeconds / durationSeconds
-        progressTrackBar.value = Float(percentage)
-    }
-    
-    //action slider
-   @objc func handleCurrentTimeSlider(_ sender: UISlider) {
-        let percetage = progressTrackBar.value
-        guard let duration = player.currentItem?.duration else { return }
-        let durationInSeconds = CMTimeGetSeconds(duration)
-        let seekTimeInSeconds = Float64(percetage) * durationInSeconds
-        let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
-        player.seek(to: seekTime)
-    }
-    
-    
-    
-    
-    
     
     private let collectionView: UICollectionView = {
         
@@ -170,15 +128,155 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
+        currentTrack = dataSourceTracks.first
+        
         setupCollectionView()
         setupTrackLabels()
         setupProgressTrackBar()
         setupTimeLabels()
         setubButtons()
         
-        currentTrack = dataSourceTracks.first
-    
     }
+    
+    //MARK: - Methods
+    
+    private func playTrack(named: String?) {
+        guard  let url = Bundle.main.url(forResource: named , withExtension: "mp3") else { return }
+        let playerItem = AVPlayerItem(url: url)
+        player.replaceCurrentItem(with: playerItem)
+    }
+    
+    // slider
+    private func updateCurrentTimeSlider() {
+        let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
+        let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale:  1))
+        let percentage = currentTimeSeconds / durationSeconds
+        progressTrackBar.value = Float(percentage)
+    }
+    
+    // time uislider label
+    private func observePlayerCurrentTime() {
+        let interval = CMTimeMake(value: 1, timescale: 2)
+        player.addPeriodicTimeObserver(forInterval: interval, queue: .main) { [weak self] time in
+            self?.currentTimeLabel.text = time.toDisplayString()
+            
+            let durationTime = self?.player.currentItem?.duration
+            let currentDurationTimeText = ((durationTime ?? CMTimeMake(value: 1, timescale: 1)) - time).toDisplayString()
+            self?.allTimeLabel.text = "-\(currentDurationTimeText)"
+            self?.updateCurrentTimeSlider()
+        }
+    }
+    
+    //action slider
+   @objc func handleCurrentTimeSlider(_ sender: UISlider) {
+        let percetage = progressTrackBar.value
+        guard let duration = player.currentItem?.duration else { return }
+        let durationInSeconds = CMTimeGetSeconds(duration)
+        let seekTimeInSeconds = Float64(percetage) * durationInSeconds
+        let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
+        player.seek(to: seekTime)
+    }
+    
+//    func moveBackForPreviousTrack() -> SearchViewModel.Cell? {
+//        let index = tracks.firstIndex(of: track)
+//        guard let myIndex = index else { return nil }
+//        var nextTrack: SearchViewModel.Cell
+//        if myIndex - 1 == -1 {
+//            nextTrack = tracks[tracks.count - 1]
+//        } else {
+//            nextTrack = tracks[myIndex - 1]
+//            self.track = nextTrack
+//        }
+//       return nextTrack
+//    }
+    
+    @objc func backwardButtonAction() {
+        print("back")
+        let visibleItems: NSArray = self.collectionView.indexPathsForVisibleItems as NSArray
+            let currentItem: IndexPath = visibleItems.object(at: 0) as! IndexPath
+        let nextItem: IndexPath = IndexPath(item: currentItem.item - 1, section: 0)
+            if nextItem.row < dataSourceTracks.count && nextItem.row >= 0 {
+                self.collectionView.scrollToItem(at: nextItem, at: .right, animated: true)
+                self.currentTrack = self.dataSourceTracks[nextItem.item]
+            } else {
+                self.collectionView.scrollToItem(at: [0, dataSourceTracks.count - 1], at: .right, animated: true)
+                self.currentTrack = self.dataSourceTracks[dataSourceTracks.count - 1]
+            }
+    }
+    
+    @objc func playButtonAction() {
+        
+        observePlayerCurrentTime()
+        
+        if player.timeControlStatus == .paused {
+            print("play")
+           player.play()
+            playPauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
+//            enlagreTrackImageView()
+        } else {
+            player.pause()
+            print("pause")
+            playPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+//            reduceTrackImageView()
+        }
+    }
+    
+    @objc func forwardButtonAction() {
+        print("forward")
+        let visibleItems: NSArray = self.collectionView.indexPathsForVisibleItems as NSArray
+           let currentItem: IndexPath = visibleItems.object(at: 0) as! IndexPath
+           let nextItem: IndexPath = IndexPath(item: currentItem.item + 1, section: 0)
+                  if nextItem.row < dataSourceTracks.count {
+                      self.collectionView.scrollToItem(at: nextItem, at: .left, animated: true)
+                self.currentTrack = self.dataSourceTracks[nextItem.item]
+                  } else {
+                      self.collectionView.scrollToItem(at: [0, dataSourceTracks.startIndex], at: .left, animated: true)
+                      self.currentTrack = self.dataSourceTracks[dataSourceTracks.startIndex]
+                  }
+    }
+}
+
+//MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+
+extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return dataSourceTracks.count
+    }
+
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellTrack.identifier, for: indexPath) as? CollectionViewCellTrack
+        else { return UICollectionViewCell() }
+        
+        let cover = dataSourceTracks[indexPath.row].cover
+        cell.imageView.image = UIImage(named: cover)
+       
+        return cell
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        DispatchQueue.main.async {
+            guard let visibleCell = self.collectionView.visibleCells.first else { return }
+            guard let indexPath = self.collectionView.indexPath(for: visibleCell) else { return }
+            self.currentTrack = self.dataSourceTracks[indexPath.item]
+            //print(indexPath.item)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 0.0
+    }
+}
+
+
+//MARK: - UI Setup
+
+extension ViewController {
     
     private func setupCollectionView() {
         view.addSubview(collectionView)
@@ -249,131 +347,5 @@ final class ViewController: UIViewController {
         forwardButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor).isActive = true
         forwardButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
         forwardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
-    }
-    
-    private func playTrack(named: String?) {
-        guard  let url = Bundle.main.url(forResource: named , withExtension: "mp3") else { return }
-        let playerItem = AVPlayerItem(url: url)
-        player.replaceCurrentItem(with: playerItem)
-        player.play()
-    }
-    
-    
-    
-    
-//    func moveBackForPreviousTrack() -> SearchViewModel.Cell? {
-//        let index = tracks.firstIndex(of: track)
-//        guard let myIndex = index else { return nil }
-//        var nextTrack: SearchViewModel.Cell
-//        if myIndex - 1 == -1 {
-//            nextTrack = tracks[tracks.count - 1]
-//        } else {
-//            nextTrack = tracks[myIndex - 1]
-//            self.track = nextTrack
-//        }
-//       return nextTrack
-//    }
-    
-    @objc func backwardButtonAction() {
-   //     let indexPosition = dataSourceTracks.first
-//        if index
-        print("back")
-    }
-    
-    
-    
-    @objc func playButtonAction() {
-        
-        observePlayerCurrentTime()
-        
-        if player.timeControlStatus == .paused {
-            print("play")
-           player.play()
-            playPauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
-//            enlagreTrackImageView()
-        } else {
-            player.pause()
-            print("pause")
-            playPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
-//            reduceTrackImageView()
-        }
-        
-        
-    }
-    
-    @objc func forwardButtonAction() {
-        print("forward")
-    }
-}
-
-
-
-//MARK: - UICollectionViewDelegate, UICollectionViewDataSource
-
-extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataSourceTracks.count
-    }
-
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellTrack.identifier, for: indexPath) as? CollectionViewCellTrack
-        else { return UICollectionViewCell() }
-        
-        let cover = dataSourceTracks[indexPath.row].cover
-        cell.imageView.image = UIImage(named: cover)
-        cell.backgroundColor = .blue
-       
-        return cell
-    }
-    
-
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        DispatchQueue.main.async {
-            guard let visibleCell = self.collectionView.visibleCells.first else { return }
-            guard let indexPath = self.collectionView.indexPath(for: visibleCell) else { return }
-            self.currentTrack = self.dataSourceTracks[indexPath.item]
-            print(self.currentTrack)
-            }
-    }
-    
-    
-    
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 0.0
-    }
-   
-}
-
-
-struct Track {
-    let trackName: String
-    let cover: String
-    let artist: String
-    let fileName: String
-
-}
-
-
-
-
-
-
-
-extension CMTime {
-    
-    func toDisplayString() -> String {
-        guard !CMTimeGetSeconds(self).isNaN else { return ""}
-        let totalSeconds = Int(CMTimeGetSeconds(self))
-        let seconds = totalSeconds % 60
-        let minuts = totalSeconds / 60
-        let timeFormatString = String(format: "%02d:%02d", minuts, seconds)
-        return timeFormatString
     }
 }
