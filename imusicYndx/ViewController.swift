@@ -12,10 +12,12 @@ import AVKit
 
 final class ViewController: UIViewController {
     
-    private var dataSourceTracks: [Track] = [Track(trackName: "1", cover: "pic1", artist: "first", fileName:     "blackbird-lonely-bird"),
+    private var dataSourceTracks: [Track] = [Track(trackName: "4", cover: "pic4", artist: "fourth", fileName: "blackbird-trapped"),
+                                             Track(trackName: "1", cover: "pic1", artist: "first", fileName:     "blackbird-lonely-bird"),
                                              Track(trackName: "2", cover: "pic2", artist: "second", fileName: "blackbird-trapped"),
                                              Track(trackName: "3", cover: "pic3", artist: "third", fileName: "blackbird-lonely-bird"),
-                                             Track(trackName: "4", cover: "pic4", artist: "fourth", fileName: "blackbird-trapped")]
+                                             Track(trackName: "4", cover: "pic4", artist: "fourth", fileName: "blackbird-trapped"),
+                                             Track(trackName: "1", cover: "pic1", artist: "first", fileName:     "blackbird-lonely-bird")]
     
     private let player: AVPlayer = {
         let player = AVPlayer()
@@ -128,7 +130,7 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .lightGray
-        currentTrack = dataSourceTracks.first
+        currentTrack = dataSourceTracks[1]
         
         setupCollectionView()
         setupTrackLabels()
@@ -137,6 +139,11 @@ final class ViewController: UIViewController {
         setubButtons()
         
     }
+    
+    override func viewDidLayoutSubviews() {
+          super.viewDidLayoutSubviews()
+          self.collectionView.scrollToItem(at: IndexPath(item: 1, section: 0), at: .left, animated: false)
+        }
     
     //MARK: - Methods
     
@@ -177,18 +184,6 @@ final class ViewController: UIViewController {
         player.seek(to: seekTime)
     }
     
-//    func moveBackForPreviousTrack() -> SearchViewModel.Cell? {
-//        let index = tracks.firstIndex(of: track)
-//        guard let myIndex = index else { return nil }
-//        var nextTrack: SearchViewModel.Cell
-//        if myIndex - 1 == -1 {
-//            nextTrack = tracks[tracks.count - 1]
-//        } else {
-//            nextTrack = tracks[myIndex - 1]
-//            self.track = nextTrack
-//        }
-//       return nextTrack
-//    }
     
     @objc func backwardButtonAction() {
         print("back")
@@ -252,21 +247,36 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
 
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellTrack.identifier, for: indexPath) as? CollectionViewCellTrack
         else { return UICollectionViewCell() }
-        
         let cover = dataSourceTracks[indexPath.row].cover
         cell.imageView.image = UIImage(named: cover)
        
         return cell
     }
     
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        DispatchQueue.main.async {
+//            guard let visibleCell = self.collectionView.visibleCells.first else { return }
+//            guard let indexPath = self.collectionView.indexPath(for: visibleCell) else { return }
+//            self.currentTrack = self.dataSourceTracks[indexPath.item]
+//            //print(indexPath.item)
+//        }
+//    }
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        DispatchQueue.main.async {
-            guard let visibleCell = self.collectionView.visibleCells.first else { return }
-            guard let indexPath = self.collectionView.indexPath(for: visibleCell) else { return }
-            self.currentTrack = self.dataSourceTracks[indexPath.item]
-            //print(indexPath.item)
+            let pageFloat = (scrollView.contentOffset.x / scrollView.frame.size.width)
+            let pageInt = Int(round(pageFloat))
+            
+            switch pageInt {
+            case 0:
+                collectionView.scrollToItem(at: [0, 4], at: .left, animated: false)
+            case dataSourceTracks.count - 1:
+                collectionView.scrollToItem(at: [0, 1], at: .left, animated: false)
+            default:
+                break
+            }
         }
-    }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         return 0.0
