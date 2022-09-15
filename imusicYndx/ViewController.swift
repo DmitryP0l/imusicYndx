@@ -14,6 +14,9 @@
 //слайдер с таймером в отдельную вью
 
 
+//  [1, 2,    1, 2,         1, 2]         (0, 1,   2, 3,        4, 5) (6)         (0, 1,   0, 1,        0, 1)
+//  [2, 3,    1, 2, 3,      1, 2]         (0, 1,   2, 3, 4,     5, 6) (7)         (1, 2,   0, 1, 2,     0, 1)
+//  [3, 4,    1, 2, 3, 4,   1, 2]         (0, 1,   2, 3, 4, 5,  6, 7) (8)         (2, 3,   0, 1, 2, 3,  0, 1)
 
 import UIKit
 import AVKit
@@ -62,6 +65,20 @@ final class ViewController: UIViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .red
         return collectionView
+    }()
+    
+    private let containerViewInfo: UIView = {
+       let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemBlue
+        return view
+    }()
+    
+    private let containerViewButtons: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = .systemCyan
+        return view
     }()
     
     private let nameTrackLabel: UILabel = {
@@ -150,9 +167,11 @@ final class ViewController: UIViewController {
         setupCollectionView()
         prepareDataSourceTracks()
         setupStartCell()
-        setupTrackLabels()
+        
+        setupContainerViews()
         setupProgressTrackBar()
         setupTimeLabels()
+        setupTrackLabels()
         setubButtons()
     }
     
@@ -289,7 +308,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
             print(pageInt)
             switch pageInt {
             case 0:
-                self.collectionView.scrollToItem(at: [0, 4], at: .left, animated: false)
+                self.collectionView.scrollToItem(at: IndexPath(item: self.dataSourceTracks.count - 4, section: 0), at: .left, animated: false)
 
             case self.dataSourceTracks.count - 2:
                 self.collectionView.scrollToItem(at: [0, 2], at: .left, animated: false)
@@ -321,57 +340,75 @@ extension ViewController {
         collectionView.delegate = self
         collectionView.dataSource = self
         
-        collectionView.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: 316).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: view.frame.width).isActive = true
         
+    }
+    
+    private func setupContainerViews() {
+        view.addSubview(containerViewInfo)
+        view.addSubview(containerViewButtons)
+        
+        containerViewInfo.topAnchor.constraint(equalTo: collectionView.bottomAnchor).isActive = true
+        containerViewInfo.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        containerViewInfo.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        containerViewInfo.heightAnchor.constraint(equalToConstant: view.frame.height / 5).isActive = true
+        
+        containerViewButtons.topAnchor.constraint(equalTo: containerViewInfo.bottomAnchor).isActive = true
+        containerViewButtons.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        containerViewButtons.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        containerViewButtons.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
     
     private func setupTrackLabels() {
-        view.addSubview(nameTrackLabel)
-        view.addSubview(artistTrackLabel)
         
-        nameTrackLabel.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 30).isActive = true
-        nameTrackLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        nameTrackLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        nameTrackLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
+        containerViewInfo.addSubview(artistTrackLabel)
+        containerViewInfo.addSubview(nameTrackLabel)
         
-        artistTrackLabel.topAnchor.constraint(equalTo: nameTrackLabel.bottomAnchor, constant: 8).isActive = true
-        artistTrackLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        artistTrackLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        
+        artistTrackLabel.bottomAnchor.constraint(equalTo: progressTrackBar.topAnchor, constant: -18).isActive = true
+        artistTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor).isActive = true
+        artistTrackLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor).isActive = true
         artistTrackLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        
+        nameTrackLabel.bottomAnchor.constraint(equalTo: artistTrackLabel.topAnchor, constant: -8).isActive = true
+        nameTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor).isActive = true
+        nameTrackLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor).isActive = true
+        nameTrackLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
     }
     
     private func setupProgressTrackBar() {
-        view.addSubview(progressTrackBar)
         
-        progressTrackBar.topAnchor.constraint(equalTo: artistTrackLabel.bottomAnchor, constant: 20).isActive = true
-        progressTrackBar.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
-        progressTrackBar.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
+        containerViewInfo.addSubview(progressTrackBar)
+        
+        progressTrackBar.centerYAnchor.constraint(equalTo: containerViewInfo.centerYAnchor, constant: 10).isActive = true
+        progressTrackBar.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8).isActive = true
+        progressTrackBar.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor, constant: -8).isActive = true
         progressTrackBar.heightAnchor.constraint(equalToConstant: 4).isActive = true
     }
     
     private func setupTimeLabels() {
-        view.addSubview(currentTimeLabel)
-        view.addSubview(allTimeLabel)
+        containerViewInfo.addSubview(currentTimeLabel)
+        containerViewInfo.addSubview(allTimeLabel)
         
-        currentTimeLabel.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 12).isActive = true
-        currentTimeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8).isActive = true
+        currentTimeLabel.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 20).isActive = true
+        currentTimeLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8).isActive = true
         currentTimeLabel.heightAnchor.constraint(equalToConstant: 10).isActive = true
         
-        allTimeLabel.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 12).isActive = true
-        allTimeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8).isActive = true
+        allTimeLabel.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 20).isActive = true
+        allTimeLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor, constant: -8).isActive = true
         allTimeLabel.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
     
     private func setubButtons() {
-        view.addSubview(backwardButton)
-        view.addSubview(playPauseButton)
-        view.addSubview(forwardButton)
+        containerViewButtons.addSubview(backwardButton)
+        containerViewButtons.addSubview(playPauseButton)
+        containerViewButtons.addSubview(forwardButton)
         
-        playPauseButton.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 100).isActive = true
-        playPauseButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        playPauseButton.centerYAnchor.constraint(equalTo: containerViewButtons.centerYAnchor, constant: -10).isActive = true
+        playPauseButton.centerXAnchor.constraint(equalTo: containerViewButtons.centerXAnchor).isActive = true
         playPauseButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
         playPauseButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         
