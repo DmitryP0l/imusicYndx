@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Track {
-    let trackName: String
-    let cover: String
-    let artist: String
-    let fileName: String
-}
+//struct Track {
+//    let trackName: String
+//    let cover: String
+//    let artist: String
+//    let fileName: String
+//}
