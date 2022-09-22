@@ -42,7 +42,7 @@ final class ViewController: UIViewController {
     private var centralCell: CollectionViewCellTrack?
     
     private let containerViewInfo: UIView = {
-       let view = UIView()
+        let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = .clear
         return view
@@ -136,18 +136,21 @@ final class ViewController: UIViewController {
         setViews()
         setCollectionView()
         prepareDataSource()
-        setupStartCell()
-
+        setStartCell()
+        notificationAudioDidEnded()
     }
     
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//        self.collectionView.contentInset.left = (UIScreen.main.bounds.width/6)
+//        self.collectionView.contentInset.right = (UIScreen.main.bounds.width/6)
+//    }
     
-    override func viewDidAppear(_ animated: Bool) {
-            super.viewDidAppear(animated)
-            self.collectionView.contentInset.left = (UIScreen.main.bounds.width/3)/2
-            self.collectionView.contentInset.right = (UIScreen.main.bounds.width/3)/2
-        }
-    
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.collectionView.contentInset.left = (UIScreen.main.bounds.width/6)
+        self.collectionView.contentInset.right = (UIScreen.main.bounds.width/6)
+    }
     
     //MARK: - Methods
     
@@ -161,20 +164,26 @@ final class ViewController: UIViewController {
     }
     
     private func prepareDataSource() {
-        //добавить проверку на количество треков
-        //один трек - добавить 2 трека слева и два трека справа
         
-        let firstPart = Array(trackList.prefix(through: 1))
-        let lastPart = Array(trackList.suffix(2))
-        let newArray = lastPart + trackList + firstPart
-        dataSource = newArray
-        collectionView.reloadData()
-//        print("first ---- \(firstPart)")
-//        print("last ----\(lastPart)")
-//        print("newArray ------\(newArray)")
+        if trackList.count == 1 {
+            guard let trackList = trackList.first else { return }
+                let newArray = [Track](repeating: trackList, count: 5)
+            dataSource = newArray
+            collectionView.reloadData()
+        } else {
+            let firstPart = Array(trackList.prefix(through: 1))
+            let lastPart = Array(trackList.suffix(2))
+            let newArray = lastPart + trackList + firstPart
+            dataSource = newArray
+            collectionView.reloadData()
+        }
+        
+        //        print("first ---- \(firstPart)")
+        //        print("last ----\(lastPart)")
+        //        print("newArray ------\(newArray)")
     }
     
-    private func setupStartCell() {
+    private func setStartCell() {
         currentTrack = dataSource[2]
         collectionView.layoutIfNeeded()
         collectionView.scrollToItem(at: IndexPath(item: 2, section: 0), at: .left, animated: true)
@@ -237,22 +246,13 @@ final class ViewController: UIViewController {
             self.currentTrack = self.dataSource[dataSource.startIndex]
         }
     }
-
+    
     // slider
     private func updateCurrentTimeSlider() {
         let currentTimeSeconds = CMTimeGetSeconds(player.currentTime())
         let durationSeconds = CMTimeGetSeconds(player.currentItem?.duration ?? CMTimeMake(value: 1, timescale:  1))
         let percentage = currentTimeSeconds / durationSeconds
         progressTrackBar.value = Float(percentage)
-        
-//        print("currentSec --- \(Float(currentTimeSeconds))")
-//        print("duration --- \(Float(durationSeconds))")
-//        print("percentage ------ \(Int(percentage * 1000))")
-//
-//        if progressTrackBar.value == progressTrackBar.maximumValue {
-//            print("next")
-//        }
-        
     }
     
     // time uislider label
@@ -277,7 +277,19 @@ final class ViewController: UIViewController {
         let seekTime = CMTimeMakeWithSeconds(seekTimeInSeconds, preferredTimescale: 1)
         player.seek(to: seekTime)
     }
+    
+    private func notificationAudioDidEnded() {
+        NotificationCenter.default.addObserver(self, selector: #selector(audioDidEnded), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil
+        )
+    }
+    
+    @objc func audioDidEnded() {
+        print("IT'S DONE!")
+        forwardButtonAction()
+        player.play()
+    }
 }
+
 
 //MARK: - UICollectionViewDelegate, UICollectionViewDataSource
 
@@ -295,8 +307,8 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellTrack.identifier, for: indexPath) as? CollectionViewCellTrack
         else { return UICollectionViewCell() }
         let cover = dataSource[indexPath.row].cover
-        cell.imageView.image = UIImage(named: cover)
-        
+        let model = CellModel.init(imageName: cover)
+        cell.model = model
         return cell
     }
     

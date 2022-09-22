@@ -6,10 +6,9 @@
 //
 
 import Foundation
+import UIKit
 
-//struct Track {
-//    let trackName: String
-//    let cover: String
-//    let artist: String
-//    let fileName: String
-//}
+
+struct CellModel {
+    var imageName: String?
+}
