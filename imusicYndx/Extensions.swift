@@ -39,8 +39,6 @@ extension UIImage {
 
 
 
-
-
 extension UIImage {
     static func gradientImage(bounds: CGRect, colors: [UIColor]) -> UIImage {
         let gradientLayer = CAGradientLayer()

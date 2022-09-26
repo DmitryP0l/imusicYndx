@@ -9,6 +9,10 @@
 //по окончании трека, переключаться на следующий и играть
 // добить логику на кнопках
 
+//работа с документацией есть делегат, унаследовали, подписывать куда?
+
+
+
 
 //  [1, 2,    1, 2,         1, 2]         (0, 1,   2, 3,        4, 5) (6)         (0, 1,   0, 1,        0, 1)
 //  [2, 3,    1, 2, 3,      1, 2]         (0, 1,   2, 3, 4,     5, 6) (7)         (1, 2,   0, 1, 2,     0, 1)
@@ -140,17 +144,17 @@ final class ViewController: UIViewController {
         notificationAudioDidEnded()
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        super.viewDidAppear(animated)
-//        self.collectionView.contentInset.left = (UIScreen.main.bounds.width/6)
-//        self.collectionView.contentInset.right = (UIScreen.main.bounds.width/6)
-//    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         self.collectionView.contentInset.left = (UIScreen.main.bounds.width/6)
         self.collectionView.contentInset.right = (UIScreen.main.bounds.width/6)
     }
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        super.viewWillAppear(animated)
+//        self.collectionView.contentInset.left = (UIScreen.main.bounds.width/6)
+//        self.collectionView.contentInset.right = (UIScreen.main.bounds.width/6)
+//    }
     
     //MARK: - Methods
     
@@ -199,9 +203,11 @@ final class ViewController: UIViewController {
         nameTrackLabel.text = currentTrack?.trackName
         artistTrackLabel.text = currentTrack?.artist
         playTrack(named: currentTrack?.fileName)
-        if let cover = currentTrack?.cover {
-            view.backgroundColor =  UIImage(named: cover)?.averageColor
-        }
+//        if let cover = currentTrack?.cover {
+//            DispatchQueue.main.async {
+//                self.view.backgroundColor =  UIImage(named: cover)?.averageColor
+//            }
+//        }
     }
     
     @objc func backwardButtonAction() {
@@ -291,7 +297,7 @@ final class ViewController: UIViewController {
 }
 
 
-//MARK: - UICollectionViewDelegate, UICollectionViewDataSource
+//MARK: - UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 
 extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
@@ -307,13 +313,21 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellTrack.identifier, for: indexPath) as? CollectionViewCellTrack
         else { return UICollectionViewCell() }
         let cover = dataSource[indexPath.row].cover
-        let model = CellModel.init(imageName: cover)
+        let labelName = dataSource[indexPath.row].trackName
+        let model = CellModel.init(imageName: cover, labelNum: labelName)
         cell.model = model
+        
+        cell.labelNoIndexPath.text = "indexPath - \(indexPath.row)"
         return cell
     }
     
+    
+    
+    
+    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        DispatchQueue.main.async {
+        print("scrollViewDidEndDecelerating")
+        
             let pageFloat = (scrollView.contentOffset.x / scrollView.frame.size.width)
             let pageInt = Int(round(pageFloat))
             print(pageInt)
@@ -325,33 +339,37 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
             default:
                 break
             }
-        }
-        DispatchQueue.main.async {
-            guard let visibleCell = self.collectionView.visibleCells.first else { return }
-            guard let indexPath = self.collectionView.indexPath(for: visibleCell) else { return }
-            //self.currentTrack = self.dataSource[indexPath.item]
-            //print(indexPath.item)
-        }
-    }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let centralPoint = CGPoint(x: collectionView.frame.width/2 + scrollView.contentOffset.x,
-                                   y: collectionView.frame.height/2 + scrollView.contentOffset.y)
-        if let indexPath = collectionView.indexPathForItem(at: centralPoint), self.centralCell == nil {
-            self.centralCell = collectionView.cellForItem(at: indexPath) as? CollectionViewCellTrack
-            self.currentTrack = dataSource[indexPath.item]
-            //                self.centralCell?.transformToLarge()
-        }
         
-        if let cell = self.centralCell {
-            let offsetX = centralPoint.x - cell.center.x
-            //разобраться что к чему
-            if offsetX < -15 || offsetX > 15 {
-                //                    self.centralCell?.transformToStandart()
-                self.centralCell = nil
+        DispatchQueue.main.async {
+            let centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
+            let collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
+            if let indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint) {
+                self.currentTrack = self.dataSource[indexPath.item]
             }
         }
     }
+    
+    
+    
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        let centralPoint = CGPoint(x: collectionView.frame.width/2 + scrollView.contentOffset.x,
+//                                   y: collectionView.frame.height/2 + scrollView.contentOffset.y)
+//        if let indexPath = collectionView.indexPathForItem(at: centralPoint), self.centralCell == nil {
+//            self.centralCell = collectionView.cellForItem(at: indexPath) as? CollectionViewCellTrack
+//            self.currentTrack = dataSource[indexPath.item]
+//            //                self.centralCell?.transformToLarge()
+//        }
+//
+//        if let cell = self.centralCell {
+//            let offsetX = centralPoint.x - cell.center.x
+//            //разобраться что к чему
+//            if offsetX < -15 || offsetX > 15 {
+//                //                    self.centralCell?.transformToStandart()
+//                self.centralCell = nil
+//            }
+//        }
+//    }
+    
 }
 
 

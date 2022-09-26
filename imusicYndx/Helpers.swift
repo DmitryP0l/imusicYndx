@@ -38,31 +38,44 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
 enum Track: CaseIterable {
     case blackbirdLonelyBird
     case blackbirdTrapped
+    case black
+    case white
     
     var trackName: String {
         switch self {
-        case .blackbirdLonelyBird:  return "LonelyBird"
-        case .blackbirdTrapped:     return "Trapped"
+        case .blackbirdLonelyBird:  return "1"
+        case .blackbirdTrapped:     return "2"
+        case .black:                return "3"
+        case .white:                return "4"
+                
         }
     }
     var cover: String {
         switch self {
         case .blackbirdLonelyBird:  return "pic1"
         case .blackbirdTrapped:     return "pic5"
+        case .black:                return "pic1"
+        case .white:                return "pic5"
+                
         }
     }
     var artist: String {
         switch self {
         case .blackbirdLonelyBird:  return "blackbird"
         case .blackbirdTrapped:     return "blackbird"
+        case .white:                return "blackbird"
+        case .black:                return "blackbird"
         }
     }
     var fileName: String {
         switch self {
         case .blackbirdLonelyBird:  return "blackbird-lonely-bird"
         case .blackbirdTrapped:     return "blackbird-trapped"
+        case .black:                return "blackbird-trapped"
+        case .white:                return "blackbird-lonely-bird"
         }
     }
+    
 }
 
 
