@@ -326,24 +326,22 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        print("scrollViewDidEndDecelerating")
+        let centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
+        let collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
+        let indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
+        let indexPathItem = indexPath?.item
         
-            let pageFloat = (scrollView.contentOffset.x / scrollView.frame.size.width)
-            let pageInt = Int(round(pageFloat))
-            print(pageInt)
-            switch pageInt {
-            case 0:
-                self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 4, section: 0), at: .left, animated: false)
-            case self.dataSource.count - 2:
-                self.collectionView.scrollToItem(at: [0, 2], at: .left, animated: false)
-            default:
-                break
-            }
+        switch indexPathItem {
+        case 0:
+            self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 4, section: 0), at: .left, animated: false)
+        case self.dataSource.count - 1:
+            self.collectionView.scrollToItem(at: [0, 3], at: .left, animated: false)
+        default:
+            break
+        }
         
         DispatchQueue.main.async {
-            let centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
-            let collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
-            if let indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint) {
+            if let indexPath = indexPath {
                 let currentTrack = self.dataSource[indexPath.item]
                 if self.currentTrack != currentTrack {
                     self.currentTrack = currentTrack
