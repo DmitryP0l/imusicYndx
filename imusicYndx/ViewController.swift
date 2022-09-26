@@ -344,32 +344,13 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
             let centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
             let collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
             if let indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint) {
-                self.currentTrack = self.dataSource[indexPath.item]
+                let currentTrack = self.dataSource[indexPath.item]
+                if self.currentTrack != currentTrack {
+                    self.currentTrack = currentTrack
+                }
             }
         }
     }
-    
-    
-    
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        let centralPoint = CGPoint(x: collectionView.frame.width/2 + scrollView.contentOffset.x,
-//                                   y: collectionView.frame.height/2 + scrollView.contentOffset.y)
-//        if let indexPath = collectionView.indexPathForItem(at: centralPoint), self.centralCell == nil {
-//            self.centralCell = collectionView.cellForItem(at: indexPath) as? CollectionViewCellTrack
-//            self.currentTrack = dataSource[indexPath.item]
-//            //                self.centralCell?.transformToLarge()
-//        }
-//
-//        if let cell = self.centralCell {
-//            let offsetX = centralPoint.x - cell.center.x
-//            //разобраться что к чему
-//            if offsetX < -15 || offsetX > 15 {
-//                //                    self.centralCell?.transformToStandart()
-//                self.centralCell = nil
-//            }
-//        }
-//    }
-    
 }
 
 
