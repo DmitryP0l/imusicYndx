@@ -19,7 +19,6 @@ final class ViewController: UIViewController {
     }
     private var centerPoint = CGPoint(x: 0, y: 0)
     private var collectionViewCenterPoint = CGPoint(x: 0, y: 0)
-    
     private var indexPathItem: Int?
     private var indexPath: IndexPath? {
         didSet {
@@ -166,7 +165,7 @@ final class ViewController: UIViewController {
         
         if trackList.count == 1 {
             guard let trackList = trackList.first else { return }
-                let newArray = [Track](repeating: trackList, count: 5)
+            let newArray = [Track](repeating: trackList, count: 5)
             dataSource = newArray
             collectionView.reloadData()
         } else {
@@ -194,14 +193,12 @@ final class ViewController: UIViewController {
         nameTrackLabel.text = currentTrack?.trackName
         artistTrackLabel.text = currentTrack?.artist
         playTrack(named: currentTrack?.fileName)
-//        if let cover = currentTrack?.cover {
-//            DispatchQueue.main.async {
-//                self.view.backgroundColor =  UIImage(named: cover)?.averageColor
-//            }
-//        }
+        //        if let cover = currentTrack?.cover {
+        //            DispatchQueue.main.async {
+        //                self.view.backgroundColor =  UIImage(named: cover)?.averageColor
+        //            }
+        //        }
     }
-    
-   
     
     @objc func backwardButtonAction() {
         print("back")
@@ -328,10 +325,14 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         indexPathItem = indexPath?.item
         
         switch indexPathItem {
+        case 0:
+            self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 2, section: 0), at: .left, animated: false)
         case 1:
             self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 3, section: 0), at: .left, animated: false)
         case self.dataSource.count - 2:
             self.collectionView.scrollToItem(at: [0, 2], at: .left, animated: false)
+        case self.dataSource.count - 1:
+            self.collectionView.scrollToItem(at: [0, 3], at: .left, animated: false)
         default:
             break
         }

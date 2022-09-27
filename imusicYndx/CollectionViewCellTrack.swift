@@ -3,13 +3,6 @@
 //  imusicYndx
 //
 //  Created by Dmitry P on 5.09.22.
-//
-//
-//
-//
-//
-//5 сделать бордер с градиентом от бесцетного к цвету
-
 
 
 import UIKit
@@ -71,12 +64,6 @@ final class CollectionViewCellTrack: UICollectionViewCell {
         labelNoIndexPath.translatesAutoresizingMaskIntoConstraints = false
         labelNoIndexPath.topAnchor.constraint(equalTo: labelNoTrack.bottomAnchor, constant: 5).isActive = true
         labelNoIndexPath.centerXAnchor.constraint(equalTo: imageView.centerXAnchor).isActive = true
-        
-//        let gradient = UIImage.gradientImage(bounds: imageView.bounds, colors: [.black, .white])
-//        let gradientColor = UIColor(patternImage: gradient)
-//        imageView.layer.borderColor = gradientColor.cgColor
-//        imageView.layer.borderWidth = 6.0
-        
     }
     
     required init?(coder: NSCoder) {

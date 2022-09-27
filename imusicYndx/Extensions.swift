@@ -8,8 +8,7 @@
 import AVKit
 import UIKit
 
-extension CMTime {
-    
+extension CMTime {    
     func toDisplayString() -> String {
         guard !CMTimeGetSeconds(self).isNaN else { return ""}
         let totalSeconds = Int(CMTimeGetSeconds(self))
@@ -19,7 +18,6 @@ extension CMTime {
         return timeFormatString
     }
 }
-
 
 extension UIImage {
     var averageColor: UIColor? {
@@ -34,25 +32,5 @@ extension UIImage {
         context.render(outputImage, toBitmap: &bitmap, rowBytes: 4, bounds: CGRect(x: 0, y: 0, width: 1, height: 1), format: .RGBA8, colorSpace: nil)
 
         return UIColor(red: CGFloat(bitmap[0]) / 255, green: CGFloat(bitmap[1]) / 255, blue: CGFloat(bitmap[2]) / 255, alpha: CGFloat(bitmap[3]) / 255)
-    }
-}
-
-
-
-extension UIImage {
-    static func gradientImage(bounds: CGRect, colors: [UIColor]) -> UIImage {
-        let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = bounds
-        gradientLayer.colors = colors.map(\.cgColor)
-
-        // This makes it left to right, default is top to bottom
-        gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
-        gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
-
-        let renderer = UIGraphicsImageRenderer(bounds: bounds)
-
-        return renderer.image { ctx in
-            gradientLayer.render(in: ctx.cgContext)
-        }
     }
 }
