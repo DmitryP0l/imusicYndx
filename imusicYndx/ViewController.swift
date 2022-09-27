@@ -30,6 +30,15 @@ final class ViewController: UIViewController {
             setDataCurrentTrack()
         }
     }
+    private var centerPoint = CGPoint(x: 0, y: 0)
+    private var collectionViewCenterPoint = CGPoint(x: 0, y: 0)
+    
+    private var indexPathItem: Int?
+    private var indexPath: IndexPath? {
+        didSet {
+            indexPathItem = indexPath?.item
+        }
+    }
     
     private let player: AVPlayer = {
         let player = AVPlayer()
@@ -144,17 +153,16 @@ final class ViewController: UIViewController {
         notificationAudioDidEnded()
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         self.collectionView.contentInset.left = (UIScreen.main.bounds.width/6)
         self.collectionView.contentInset.right = (UIScreen.main.bounds.width/6)
+        
+        centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
+        collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
+        indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
+        indexPathItem = indexPath?.item
     }
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        self.collectionView.contentInset.left = (UIScreen.main.bounds.width/6)
-//        self.collectionView.contentInset.right = (UIScreen.main.bounds.width/6)
-//    }
     
     //MARK: - Methods
     
@@ -181,10 +189,6 @@ final class ViewController: UIViewController {
             dataSource = newArray
             collectionView.reloadData()
         }
-        
-        //        print("first ---- \(firstPart)")
-        //        print("last ----\(lastPart)")
-        //        print("newArray ------\(newArray)")
     }
     
     private func setStartCell() {
@@ -210,19 +214,30 @@ final class ViewController: UIViewController {
 //        }
     }
     
+   
+    
     @objc func backwardButtonAction() {
         print("back")
-        let visibleItems: NSArray = self.collectionView.indexPathsForVisibleItems as NSArray
-        let currentItem: IndexPath = visibleItems.object(at: 0) as! IndexPath
-        let nextItem: IndexPath = IndexPath(item: currentItem.item - 1, section: 0)
-        if nextItem.row < dataSource.count && nextItem.row >= 0 {
-            self.collectionView.scrollToItem(at: nextItem, at: .right, animated: false)
-            self.currentTrack = self.dataSource[nextItem.item]
-        } else {
-            self.collectionView.scrollToItem(at: [0, dataSource.count - 1], at: .right, animated: false)
-            self.currentTrack = self.dataSource[dataSource.count - 1]
+        
+        guard let indexPath = indexPath, let indexPathItem = indexPathItem else { return }
+        switch indexPathItem {
+        case 1:
+            self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 4, section: 0), at: .left, animated: false)
+           self.collectionView.scrollToItem(at: [0, 4], at: .left, animated: false)
+            self.indexPath = [0, 4]
+            currentTrack = self.dataSource[4]
+        default:
+            let backIndexPath = IndexPath(item: indexPath.item - 1, section: 0)
+            collectionView.scrollToItem(at: backIndexPath, at: .right, animated: false)
+            self.indexPath = backIndexPath
+            collectionView.reloadData()
+            currentTrack = self.dataSource[backIndexPath.item]
         }
-    }
+//        print("centerPoint--\(centerPoint)")
+//        print("collectionViewCenterPoint--\(collectionViewCenterPoint)")
+//        print("indexPath--\(self.indexPath)")
+//        print("indexPathItem ---\(self.indexPathItem)")
+        }
     
     @objc func playButtonAction() {
         observePlayerCurrentTime()
@@ -241,15 +256,18 @@ final class ViewController: UIViewController {
     
     @objc func forwardButtonAction() {
         print("forward")
-        let visibleItems: NSArray = self.collectionView.indexPathsForVisibleItems as NSArray
-        let currentItem: IndexPath = visibleItems.object(at: 0) as! IndexPath
-        let nextItem: IndexPath = IndexPath(item: currentItem.item + 1, section: 0)
-        if nextItem.row < dataSource.count {
-            self.collectionView.scrollToItem(at: nextItem, at: .left, animated: false)
-            self.currentTrack = self.dataSource[nextItem.item]
-        } else {
-            self.collectionView.scrollToItem(at: [0, dataSource.startIndex], at: .left, animated: false)
-            self.currentTrack = self.dataSource[dataSource.startIndex]
+        
+        
+        
+//        let visibleItems: NSArray = self.collectionView.indexPathsForVisibleItems as NSArray
+//        let currentItem: IndexPath = visibleItems.object(at: 0) as! IndexPath
+//        let nextItem: IndexPath = IndexPath(item: currentItem.item + 1, section: 0)
+//        if nextItem.row < dataSource.count {
+//            self.collectionView.scrollToItem(at: nextItem, at: .left, animated: false)
+//            self.currentTrack = self.dataSource[nextItem.item]
+//        } else {
+//            self.collectionView.scrollToItem(at: [0, dataSource.startIndex], at: .left, animated: false)
+//            self.currentTrack = self.dataSource[dataSource.startIndex]
         }
     }
     
@@ -321,19 +339,15 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         return cell
     }
     
-    
-    
-    
-    
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
-        let collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
-        let indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
-        let indexPathItem = indexPath?.item
+        centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
+        collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
+        indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
+        indexPathItem = indexPath?.item
         
         switch indexPathItem {
-        case 0:
-            self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 4, section: 0), at: .left, animated: false)
+        case 1:
+            self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 3, section: 0), at: .left, animated: false)
         case self.dataSource.count - 1:
             self.collectionView.scrollToItem(at: [0, 3], at: .left, animated: false)
         default:
@@ -341,7 +355,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         }
         
         DispatchQueue.main.async {
-            if let indexPath = indexPath {
+            if let indexPath = self.indexPath {
                 let currentTrack = self.dataSource[indexPath.item]
                 if self.currentTrack != currentTrack {
                     self.currentTrack = currentTrack
