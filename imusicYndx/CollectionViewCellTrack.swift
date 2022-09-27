@@ -14,10 +14,10 @@ final class CollectionViewCellTrack: UICollectionViewCell {
     var model: CellModel? {
         didSet {
             guard let model = model else { return }
-            let image = UIImage(named: model.imageName ?? "pic1")
+            let image = UIImage(named: model.imageName ?? "pianokeys")
             let color = image?.averageColor?.cgColor
             imageView.image = image
-            imageView.layer.borderColor = color?.copy(alpha: 0.5)
+            imageView.layer.borderColor = color?.copy(alpha: 0.3)
             labelNoTrack.text = model.labelNum
         }
     }

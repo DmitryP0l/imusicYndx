@@ -4,6 +4,12 @@
 //
 //  Created by Dmitry P on 4.09.22.
 //
+// поправить список треков
+// загружать с ячейкой в центре
+// добавить фон чтобы добавить градиет
+// попробовать добавить увеличение ячейки при воспроизведении
+
+
 
 import UIKit
 import AVKit
@@ -57,7 +63,8 @@ final class ViewController: UIViewController {
     private let nameTrackLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.font = .systemFont(ofSize: 22)
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 24, weight: .bold)
         label.textAlignment = .left
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -67,7 +74,8 @@ final class ViewController: UIViewController {
     private let artistTrackLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.font = .systemFont(ofSize: 18)
+        label.textColor = .white
+        label.font = .systemFont(ofSize: 16)
         label.textAlignment = .left
         label.numberOfLines = 1
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -87,7 +95,8 @@ final class ViewController: UIViewController {
     private let currentTimeLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
-        label.text = "00.00"
+        label.textColor = .white
+        label.text = "00:00"
         label.font = .systemFont(ofSize: 14)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -97,6 +106,7 @@ final class ViewController: UIViewController {
     private let allTimeLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .clear
+        label.textColor = .white
         label.font = .systemFont(ofSize: 14)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -104,9 +114,13 @@ final class ViewController: UIViewController {
     }()
     
     private let backwardButton: UIButton = {
-        let button = UIButton()
-        button.backgroundColor = .white
-        button.setImage(UIImage(systemName: "backward"), for: .normal)
+        let button = UIButton(type: .system)
+        button.backgroundColor = .clear
+        button.tintColor = .white
+        button.bounds.size.height = 60
+        button.bounds.size.width = 60
+        button.layer.cornerRadius = button.bounds.size.height / 2
+        button.setImage(UIImage(systemName: "backward.end"), for: .normal)
         button.addTarget(Any?.self, action: #selector(backwardButtonAction), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -114,17 +128,22 @@ final class ViewController: UIViewController {
     
     private let playPauseButton: UIButton = {
         let button = UIButton(type: .system)
-        button.backgroundColor = .white
-        button.setImage(UIImage(systemName: "play"), for: .normal)
+        button.tintColor = .white
+        button.backgroundColor = UIColor(white: 0.5, alpha: 0.5)
+        button.bounds.size.height = 80
+        button.bounds.size.width = 80
+        button.layer.cornerRadius = button.bounds.size.height / 2
+        button.setImage(UIImage(systemName: "play.fill"), for: .normal)
         button.addTarget(Any?.self, action: #selector(playButtonAction), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     private let forwardButton: UIButton = {
-        let button = UIButton(type: .system) //?
-        button.backgroundColor = .white
-        button.setImage(UIImage(systemName: "forward"), for: .normal)
+        let button = UIButton(type: .system)
+        button.backgroundColor = .clear
+        button.tintColor = .white
+        button.setImage(UIImage(systemName: "forward.end"), for: .normal)
         button.addTarget(Any?.self, action: #selector(forwardButtonAction), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -159,6 +178,7 @@ final class ViewController: UIViewController {
                                     CollectionViewCellTrack.identifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
+        collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
     }
     
     private func prepareDataSource() {
@@ -193,11 +213,11 @@ final class ViewController: UIViewController {
         nameTrackLabel.text = currentTrack?.trackName
         artistTrackLabel.text = currentTrack?.artist
         playTrack(named: currentTrack?.fileName)
-        //        if let cover = currentTrack?.cover {
-        //            DispatchQueue.main.async {
-        //                self.view.backgroundColor =  UIImage(named: cover)?.averageColor
-        //            }
-        //        }
+                if let cover = currentTrack?.cover {
+                    UIView.animate(withDuration: 1, delay: 0.7) {
+                        self.view.backgroundColor =  UIImage(named: cover)?.averageColor
+                    } completion: { _ in }
+                }
     }
     
     @objc func backwardButtonAction() {
@@ -222,14 +242,12 @@ final class ViewController: UIViewController {
     @objc func playButtonAction() {
         observePlayerCurrentTime()
         if player.timeControlStatus == .paused {
-            print("play")
             player.play()
-            playPauseButton.setImage(UIImage(systemName: "pause"), for: .normal)
+            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
             //            enlagreTrackImageView()
         } else {
             player.pause()
-            print("pause")
-            playPauseButton.setImage(UIImage(systemName: "play"), for: .normal)
+            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
             //            reduceTrackImageView()
         }
     }
@@ -387,12 +405,12 @@ extension ViewController {
         containerViewInfo.addSubview(allTimeLabel)
         
         artistTrackLabel.bottomAnchor.constraint(equalTo: progressTrackBar.topAnchor, constant: -18).isActive = true
-        artistTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor).isActive = true
+        artistTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8).isActive = true
         artistTrackLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor).isActive = true
         artistTrackLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
         
         nameTrackLabel.bottomAnchor.constraint(equalTo: artistTrackLabel.topAnchor, constant: -8).isActive = true
-        nameTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor).isActive = true
+        nameTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8).isActive = true
         nameTrackLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor).isActive = true
         nameTrackLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
@@ -420,14 +438,14 @@ extension ViewController {
         playPauseButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
         playPauseButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         
-        backwardButton.trailingAnchor.constraint(equalTo: playPauseButton.leadingAnchor, constant: -50).isActive = true
+        backwardButton.trailingAnchor.constraint(equalTo: playPauseButton.leadingAnchor, constant: -20).isActive = true
         backwardButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor).isActive = true
-        backwardButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        backwardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        backwardButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        backwardButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         
-        forwardButton.leadingAnchor.constraint(equalTo: playPauseButton.trailingAnchor, constant: 50).isActive = true
+        forwardButton.leadingAnchor.constraint(equalTo: playPauseButton.trailingAnchor, constant: 20).isActive = true
         forwardButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor).isActive = true
-        forwardButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        forwardButton.widthAnchor.constraint(equalToConstant: 50).isActive = true
+        forwardButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        forwardButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
     }
 }
