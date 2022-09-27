@@ -5,19 +5,6 @@
 //  Created by Dmitry P on 4.09.22.
 //
 
-//поправть изображение кнопки плей при окончании трека
-//по окончании трека, переключаться на следующий и играть
-// добить логику на кнопках
-
-//работа с документацией есть делегат, унаследовали, подписывать куда?
-
-
-
-
-//  [1, 2,    1, 2,         1, 2]         (0, 1,   2, 3,        4, 5) (6)         (0, 1,   0, 1,        0, 1)
-//  [2, 3,    1, 2, 3,      1, 2]         (0, 1,   2, 3, 4,     5, 6) (7)         (1, 2,   0, 1, 2,     0, 1)
-//  [3, 4,    1, 2, 3, 4,   1, 2]         (0, 1,   2, 3, 4, 5,  6, 7) (8)         (2, 3,   0, 1, 2, 3,  0, 1)
-
 import UIKit
 import AVKit
 
@@ -223,7 +210,7 @@ final class ViewController: UIViewController {
         switch indexPathItem {
         case 1:
             self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 4, section: 0), at: .left, animated: false)
-           self.collectionView.scrollToItem(at: [0, 4], at: .left, animated: false)
+            self.collectionView.scrollToItem(at: [0, 4], at: .left, animated: false)
             self.indexPath = [0, 4]
             currentTrack = self.dataSource[4]
         default:
@@ -233,11 +220,7 @@ final class ViewController: UIViewController {
             collectionView.reloadData()
             currentTrack = self.dataSource[backIndexPath.item]
         }
-//        print("centerPoint--\(centerPoint)")
-//        print("collectionViewCenterPoint--\(collectionViewCenterPoint)")
-//        print("indexPath--\(self.indexPath)")
-//        print("indexPathItem ---\(self.indexPathItem)")
-        }
+    }
     
     @objc func playButtonAction() {
         observePlayerCurrentTime()
@@ -255,19 +238,18 @@ final class ViewController: UIViewController {
     }
     
     @objc func forwardButtonAction() {
-        print("forward")
+        guard let indexPath = indexPath, let indexPathItem = indexPathItem else { return }
+        let nextIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
         
-        
-        
-//        let visibleItems: NSArray = self.collectionView.indexPathsForVisibleItems as NSArray
-//        let currentItem: IndexPath = visibleItems.object(at: 0) as! IndexPath
-//        let nextItem: IndexPath = IndexPath(item: currentItem.item + 1, section: 0)
-//        if nextItem.row < dataSource.count {
-//            self.collectionView.scrollToItem(at: nextItem, at: .left, animated: false)
-//            self.currentTrack = self.dataSource[nextItem.item]
-//        } else {
-//            self.collectionView.scrollToItem(at: [0, dataSource.startIndex], at: .left, animated: false)
-//            self.currentTrack = self.dataSource[dataSource.startIndex]
+        switch indexPathItem {
+        case self.dataSource.count - 2:
+            self.collectionView.scrollToItem(at: [0, 3], at: .left, animated: false)
+            self.indexPath = [0, 3]
+            currentTrack = self.dataSource[nextIndexPath.item]
+        default:
+            collectionView.scrollToItem(at: nextIndexPath, at: .left, animated: false)
+            self.indexPath = nextIndexPath
+            currentTrack = self.dataSource[nextIndexPath.item]
         }
     }
     
@@ -322,11 +304,11 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource.count
     }
-
+    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellTrack.identifier, for: indexPath) as? CollectionViewCellTrack
         else { return UICollectionViewCell() }
@@ -348,8 +330,8 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         switch indexPathItem {
         case 1:
             self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 3, section: 0), at: .left, animated: false)
-        case self.dataSource.count - 1:
-            self.collectionView.scrollToItem(at: [0, 3], at: .left, animated: false)
+        case self.dataSource.count - 2:
+            self.collectionView.scrollToItem(at: [0, 2], at: .left, animated: false)
         default:
             break
         }
