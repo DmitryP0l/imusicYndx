@@ -9,7 +9,7 @@ import UIKit
 
 
 
-class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
+final class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
     override func prepare() {
         super.prepare()
         
@@ -34,45 +34,44 @@ class CustomCollectionViewFlowLayout: UICollectionViewFlowLayout {
 }
 
 
-
 enum Track: CaseIterable {
-    case blackbirdLonelyBird
-    case blackbirdTrapped
-    case black
-    case white
+    case bensoundLifeiswonderful
+    case bensoundMass
+    case bensoundGlitchfidelity
+    case pianomoment
     
     var trackName: String {
         switch self {
-        case .blackbirdLonelyBird:  return "1"
-        case .blackbirdTrapped:     return "2"
-        case .black:                return "3"
-        case .white:                return "4"
-                
+        case .bensoundLifeiswonderful:  return "1 - Life Is Wonderful (Song+Instr)"
+        case .bensoundMass:             return "2 - Mass"
+        case .bensoundGlitchfidelity:   return "3 - Glitch"
+        case .pianomoment:              return "4 - Piano Moment"
+            
         }
     }
     var cover: String {
         switch self {
-        case .blackbirdLonelyBird:  return "pic1"
-        case .blackbirdTrapped:     return "pic5"
-        case .black:                return "pic1"
-        case .white:                return "pic5"
-                
+        case .bensoundLifeiswonderful:  return "zacnelson"
+        case .bensoundMass:             return "theatreofdelays"
+        case .bensoundGlitchfidelity:   return "yari"
+        case .pianomoment:              return "pianomoment"
+            
         }
     }
     var artist: String {
         switch self {
-        case .blackbirdLonelyBird:  return "blackbird"
-        case .blackbirdTrapped:     return "blackbird"
-        case .white:                return "blackbird"
-        case .black:                return "blackbird"
+        case .bensoundLifeiswonderful:  return "Zac Nelson"
+        case .bensoundMass:             return "Theatre Of Delays"
+        case .bensoundGlitchfidelity:   return "Fidelity Yari"
+        case .pianomoment:              return "Benjamin Tissot"
         }
     }
     var fileName: String {
         switch self {
-        case .blackbirdLonelyBird:  return "blackbird-lonely-bird"
-        case .blackbirdTrapped:     return "blackbird-trapped"
-        case .black:                return "blackbird-trapped"
-        case .white:                return "blackbird-lonely-bird"
+        case .bensoundLifeiswonderful:  return "bensound-lifeiswonderful"
+        case .bensoundMass:             return "bensound-mass"
+        case .bensoundGlitchfidelity:   return "bensound-glitchfidelity"
+        case .pianomoment:              return "pianomoment"
         }
     }
 }

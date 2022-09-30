@@ -6,8 +6,9 @@
 //
 // поправить список треков
 // загружать с ячейкой в центре
+// лэйблы с прокруткой
 // добавить фон чтобы добавить градиет
-// попробовать добавить увеличение ячейки при воспроизведении
+// добавить увеличение ячейки при воспроизведении
 
 
 
@@ -178,7 +179,6 @@ final class ViewController: UIViewController {
                                     CollectionViewCellTrack.identifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
-        collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
     }
     
     private func prepareDataSource() {
@@ -244,15 +244,16 @@ final class ViewController: UIViewController {
         if player.timeControlStatus == .paused {
             player.play()
             playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-            //            enlagreTrackImageView()
+            //     add       enlagreCover()
         } else {
             player.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            //            reduceTrackImageView()
+            //      add      reduceCover()
         }
     }
     
     @objc func forwardButtonAction() {
+        
         guard let indexPath = indexPath, let indexPathItem = indexPathItem else { return }
         let nextIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
         
@@ -305,12 +306,10 @@ final class ViewController: UIViewController {
     }
     
     @objc func audioDidEnded() {
-        print("IT'S DONE!")
         forwardButtonAction()
         player.play()
     }
 }
-
 
 //MARK: - UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout
 
@@ -337,6 +336,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
         centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
         collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
         indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)

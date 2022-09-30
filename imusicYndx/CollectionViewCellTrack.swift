@@ -24,7 +24,6 @@ final class CollectionViewCellTrack: UICollectionViewCell {
 
     private let imageView: UIImageView = {
        let imageView = UIImageView()
-        
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8

@@ -7,32 +7,36 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		0A45D1E028CA8F4600E16B48 /* blackbird-lonely-bird.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A45D1DF28CA8F4500E16B48 /* blackbird-lonely-bird.mp3 */; };
-		0A45D1E228CA8F6100E16B48 /* blackbird-trapped.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A45D1E128CA8F6100E16B48 /* blackbird-trapped.mp3 */; };
 		0A45D1E428CA92B200E16B48 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A45D1E328CA92B200E16B48 /* Extensions.swift */; };
 		0A45D1E628CA92F600E16B48 /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A45D1E528CA92F600E16B48 /* Model.swift */; };
 		0A45D1E828D5DD6600E16B48 /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A45D1E728D5DD6500E16B48 /* Helpers.swift */; };
+		0A59A60228E7712600FF1E19 /* bensound-lifeiswonderful.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A59A60128E7712600FF1E19 /* bensound-lifeiswonderful.mp3 */; };
+		0A59A60428E7713400FF1E19 /* bensound-mass.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A59A60328E7713400FF1E19 /* bensound-mass.mp3 */; };
+		0A59A60628E7714600FF1E19 /* bensound-glitchfidelity.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A59A60528E7714600FF1E19 /* bensound-glitchfidelity.mp3 */; };
+		0A59A60828E7715F00FF1E19 /* pianomoment.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 0A59A60728E7715F00FF1E19 /* pianomoment.mp3 */; };
+		0A59A60A28E775F900FF1E19 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0A59A60928E775F900FF1E19 /* Assets.xcassets */; };
 		0AEED1DE28C4BFC200CC22E2 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEED1DD28C4BFC200CC22E2 /* AppDelegate.swift */; };
 		0AEED1E028C4BFC200CC22E2 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEED1DF28C4BFC200CC22E2 /* SceneDelegate.swift */; };
 		0AEED1E228C4BFC200CC22E2 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEED1E128C4BFC200CC22E2 /* ViewController.swift */; };
 		0AEED1E528C4BFC200CC22E2 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEED1E328C4BFC200CC22E2 /* Main.storyboard */; };
-		0AEED1E728C4BFC600CC22E2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0AEED1E628C4BFC600CC22E2 /* Assets.xcassets */; };
 		0AEED1EA28C4BFC600CC22E2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0AEED1E828C4BFC600CC22E2 /* LaunchScreen.storyboard */; };
 		0AEED1F328C6211000CC22E2 /* CollectionViewCellTrack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0AEED1F228C6211000CC22E2 /* CollectionViewCellTrack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		0A45D1DF28CA8F4500E16B48 /* blackbird-lonely-bird.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "blackbird-lonely-bird.mp3"; sourceTree = "<group>"; };
-		0A45D1E128CA8F6100E16B48 /* blackbird-trapped.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "blackbird-trapped.mp3"; sourceTree = "<group>"; };
 		0A45D1E328CA92B200E16B48 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		0A45D1E528CA92F600E16B48 /* Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		0A45D1E728D5DD6500E16B48 /* Helpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
+		0A59A60128E7712600FF1E19 /* bensound-lifeiswonderful.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "bensound-lifeiswonderful.mp3"; sourceTree = "<group>"; };
+		0A59A60328E7713400FF1E19 /* bensound-mass.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "bensound-mass.mp3"; sourceTree = "<group>"; };
+		0A59A60528E7714600FF1E19 /* bensound-glitchfidelity.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = "bensound-glitchfidelity.mp3"; sourceTree = "<group>"; };
+		0A59A60728E7715F00FF1E19 /* pianomoment.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pianomoment.mp3; sourceTree = "<group>"; };
+		0A59A60928E775F900FF1E19 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AEED1DA28C4BFC200CC22E2 /* imusicYndx.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = imusicYndx.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		0AEED1DD28C4BFC200CC22E2 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		0AEED1DF28C4BFC200CC22E2 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		0AEED1E128C4BFC200CC22E2 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		0AEED1E428C4BFC200CC22E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		0AEED1E628C4BFC600CC22E2 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		0AEED1E928C4BFC600CC22E2 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		0AEED1EB28C4BFC600CC22E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		0AEED1F228C6211000CC22E2 /* CollectionViewCellTrack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CollectionViewCellTrack.swift; sourceTree = "<group>"; };
@@ -76,8 +80,10 @@
 				0A45D1E728D5DD6500E16B48 /* Helpers.swift */,
 				0AEED1E328C4BFC200CC22E2 /* Main.storyboard */,
 				0AEED1EB28C4BFC600CC22E2 /* Info.plist */,
-				0A45D1DF28CA8F4500E16B48 /* blackbird-lonely-bird.mp3 */,
-				0A45D1E128CA8F6100E16B48 /* blackbird-trapped.mp3 */,
+				0A59A60128E7712600FF1E19 /* bensound-lifeiswonderful.mp3 */,
+				0A59A60328E7713400FF1E19 /* bensound-mass.mp3 */,
+				0A59A60528E7714600FF1E19 /* bensound-glitchfidelity.mp3 */,
+				0A59A60728E7715F00FF1E19 /* pianomoment.mp3 */,
 			);
 			path = imusicYndx;
 			sourceTree = "<group>";
@@ -87,8 +93,8 @@
 			children = (
 				0AEED1DD28C4BFC200CC22E2 /* AppDelegate.swift */,
 				0AEED1DF28C4BFC200CC22E2 /* SceneDelegate.swift */,
-				0AEED1E628C4BFC600CC22E2 /* Assets.xcassets */,
 				0AEED1E828C4BFC600CC22E2 /* LaunchScreen.storyboard */,
+				0A59A60928E775F900FF1E19 /* Assets.xcassets */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -152,10 +158,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				0AEED1EA28C4BFC600CC22E2 /* LaunchScreen.storyboard in Resources */,
-				0AEED1E728C4BFC600CC22E2 /* Assets.xcassets in Resources */,
-				0A45D1E228CA8F6100E16B48 /* blackbird-trapped.mp3 in Resources */,
-				0A45D1E028CA8F4600E16B48 /* blackbird-lonely-bird.mp3 in Resources */,
+				0A59A60628E7714600FF1E19 /* bensound-glitchfidelity.mp3 in Resources */,
+				0A59A60428E7713400FF1E19 /* bensound-mass.mp3 in Resources */,
 				0AEED1E528C4BFC200CC22E2 /* Main.storyboard in Resources */,
+				0A59A60A28E775F900FF1E19 /* Assets.xcassets in Resources */,
+				0A59A60828E7715F00FF1E19 /* pianomoment.mp3 in Resources */,
+				0A59A60228E7712600FF1E19 /* bensound-lifeiswonderful.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
