@@ -14,6 +14,7 @@
 
 import UIKit
 import AVKit
+import MarqueeLabel
 
 final class ViewController: UIViewController {
     
