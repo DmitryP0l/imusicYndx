@@ -11,5 +11,4 @@ import UIKit
 
 struct CellModel {
     var imageName: String?
-    var labelNum: String?
 }

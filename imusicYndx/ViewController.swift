@@ -3,10 +3,8 @@
 //  imusicYndx
 //
 //  Created by Dmitry P on 4.09.22.
-//
-// поправить список треков
+
 // загружать с ячейкой в центре
-// лэйблы с прокруткой
 // добавить фон чтобы добавить градиет
 // добавить увеличение ячейки при воспроизведении
 
@@ -62,8 +60,11 @@ final class ViewController: UIViewController {
         return view
     }()
     
-    private let nameTrackLabel: UILabel = {
-        let label = UILabel()
+    private let nameTrackLabel: MarqueeLabel = {
+        let label = MarqueeLabel.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0), duration: 8.0, fadeLength: 1.0)
+        label.trailingBuffer = 80
+        label.fadeLength = 20
+        label.animationDelay = 2
         label.backgroundColor = .clear
         label.textColor = .white
         label.font = .systemFont(ofSize: 24, weight: .bold)
@@ -73,8 +74,11 @@ final class ViewController: UIViewController {
         return label
     }()
     
-    private let artistTrackLabel: UILabel = {
-        let label = UILabel()
+    private let artistTrackLabel: MarqueeLabel = {
+        let label = MarqueeLabel.init(frame: CGRect(x: 0, y: 0, width: 0, height: 0), duration: 8.0, fadeLength: 1.0)
+        label.trailingBuffer = 80
+        label.fadeLength = 20
+        label.animationDelay = 2
         label.backgroundColor = .clear
         label.textColor = .white
         label.font = .systemFont(ofSize: 16)
@@ -328,11 +332,8 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CollectionViewCellTrack.identifier, for: indexPath) as? CollectionViewCellTrack
         else { return UICollectionViewCell() }
         let cover = dataSource[indexPath.row].cover
-        let labelName = dataSource[indexPath.row].trackName
-        let model = CellModel.init(imageName: cover, labelNum: labelName)
+        let model = CellModel.init(imageName: cover)
         cell.model = model
-        
-        cell.labelNoIndexPath.text = "indexPath - \(indexPath.row)"
         return cell
     }
     

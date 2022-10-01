@@ -42,7 +42,7 @@ enum Track: CaseIterable {
     
     var trackName: String {
         switch self {
-        case .bensoundLifeiswonderful:  return "1 - Life Is Wonderful (Song+Instr)"
+        case .bensoundLifeiswonderful:  return "1 - Life Is Wonderful (Song + Instrumental)"
         case .bensoundMass:             return "2 - Mass"
         case .bensoundGlitchfidelity:   return "3 - Glitch"
         case .pianomoment:              return "4 - Piano Moment"
