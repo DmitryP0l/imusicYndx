@@ -4,9 +4,7 @@
 //
 //  Created by Dmitry P on 4.09.22.
 
-// загружать с ячейкой в центре
-// добавить фон чтобы добавить градиет от светлого к темному
-
+// загружать с ячейкой в центре!
 
 
 import UIKit
@@ -168,9 +166,7 @@ final class ViewController: UIViewController {
         self.collectionView.contentInset.left = (UIScreen.main.bounds.width/6)
         self.collectionView.contentInset.right = (UIScreen.main.bounds.width/6)
         
-        centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
-        collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
-        indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
+        setCoordinateCentralCell()
         indexPathItem = indexPath?.item
     }
     
@@ -179,14 +175,13 @@ final class ViewController: UIViewController {
     private func setCollectionView() {
         collectionView.dataSource = self
         collectionView.delegate = self
-        collectionView.register(CollectionViewCellTrack.self, forCellWithReuseIdentifier:
-                                    CollectionViewCellTrack.identifier)
+        collectionView.register(CollectionViewCellTrack.self,
+                                forCellWithReuseIdentifier: CollectionViewCellTrack.identifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
     }
     
     private func prepareDataSource() {
-        
         if trackList.count == 1 {
             guard let trackList = trackList.first else { return }
             let newArray = [Track](repeating: trackList, count: 5)
@@ -205,6 +200,12 @@ final class ViewController: UIViewController {
         currentTrack = dataSource[2]
         collectionView.layoutIfNeeded()
         collectionView.scrollToItem(at: IndexPath(item: 2, section: 0), at: .left, animated: true)
+    }
+    
+    private func setCoordinateCentralCell() {
+        centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
+        collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
+        indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
     }
     
     private func playTrack(named: String?) {
@@ -258,9 +259,7 @@ final class ViewController: UIViewController {
     
     func transformToEnlarge() {
         collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
-        centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
-        collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
-        indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
+        setCoordinateCentralCell()
         
         if let indexPath = indexPath {
             self.centralCell = (self.collectionView.cellForItem(at: indexPath) as? CollectionViewCellTrack)
@@ -360,9 +359,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
-        centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
-        collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
-        indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
+        setCoordinateCentralCell()
         indexPathItem = indexPath?.item
         
         switch indexPathItem {
