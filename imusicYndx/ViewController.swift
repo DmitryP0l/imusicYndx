@@ -225,38 +225,6 @@ final class ViewController: UIViewController {
         }
     }
     
-    @objc func backwardButtonAction() {
-        print("back")
-        
-        guard let indexPath = indexPath, let indexPathItem = indexPathItem else { return }
-        switch indexPathItem {
-        case 1:
-            self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 4, section: 0), at: .left, animated: false)
-            self.collectionView.scrollToItem(at: [0, 4], at: .left, animated: false)
-            self.indexPath = [0, 4]
-            currentTrack = self.dataSource[4]
-        default:
-            let backIndexPath = IndexPath(item: indexPath.item - 1, section: 0)
-            collectionView.scrollToItem(at: backIndexPath, at: .right, animated: false)
-            self.indexPath = backIndexPath
-            collectionView.reloadData()
-            currentTrack = self.dataSource[backIndexPath.item]
-        }
-    }
-    
-    @objc func playButtonAction() {
-        observePlayerCurrentTime()
-        if player.timeControlStatus == .paused {
-            player.play()
-            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-            transformToEnlarge()
-        } else {
-            player.pause()
-            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            transformToReduce()
-        }
-    }
-    
     func transformToEnlarge() {
         collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
         setCoordinateCentralCell()
@@ -277,6 +245,38 @@ final class ViewController: UIViewController {
         self.centralCell?.imageView.transform = CGAffineTransform.identity
         }
     }
+    @objc func backwardButtonAction() {
+        guard let indexPath = indexPath, let indexPathItem = indexPathItem else { return }
+        switch indexPathItem {
+        case 1:
+            self.collectionView.scrollToItem(at: IndexPath(item: self.dataSource.count - 4, section: 0), at: .left, animated: false)
+            self.collectionView.scrollToItem(at: [0, 4], at: .left, animated: false)
+            self.indexPath = [0, 4]
+            currentTrack = self.dataSource[4]
+        default:
+            let backIndexPath = IndexPath(item: indexPath.item - 1, section: 0)
+            collectionView.scrollToItem(at: backIndexPath, at: .right, animated: false)
+            self.indexPath = backIndexPath
+            collectionView.reloadData()
+            currentTrack = self.dataSource[backIndexPath.item]
+        }
+        if self.player.timeControlStatus == .playing {
+            self.transformToEnlarge()
+        }
+    }
+    
+    @objc func playButtonAction() {
+        observePlayerCurrentTime()
+        if player.timeControlStatus == .paused {
+            player.play()
+            playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
+            transformToEnlarge()
+        } else {
+            player.pause()
+            playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
+            transformToReduce()
+        }
+    }
     
     @objc func forwardButtonAction() {
         guard let indexPath = indexPath, let indexPathItem = indexPathItem else { return }
@@ -291,6 +291,9 @@ final class ViewController: UIViewController {
             collectionView.scrollToItem(at: nextIndexPath, at: .left, animated: false)
             self.indexPath = nextIndexPath
             currentTrack = self.dataSource[nextIndexPath.item]
+        }
+        if self.player.timeControlStatus == .playing {
+            self.transformToEnlarge()
         }
     }
     
@@ -333,6 +336,7 @@ final class ViewController: UIViewController {
     @objc func audioDidEnded() {
         forwardButtonAction()
         player.play()
+        transformToEnlarge()
     }
 }
 
@@ -343,7 +347,7 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return dataSource.count
     }
