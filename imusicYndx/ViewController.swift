@@ -5,8 +5,7 @@
 //  Created by Dmitry P on 4.09.22.
 
 // загружать с ячейкой в центре
-// добавить фон чтобы добавить градиет
-// добавить увеличение ячейки при воспроизведении
+// добавить фон чтобы добавить градиет от светлого к темному
 
 
 
@@ -218,11 +217,11 @@ final class ViewController: UIViewController {
         nameTrackLabel.text = currentTrack?.trackName
         artistTrackLabel.text = currentTrack?.artist
         playTrack(named: currentTrack?.fileName)
-                if let cover = currentTrack?.cover {
-                    UIView.animate(withDuration: 1, delay: 0.7) {
-                        self.view.backgroundColor =  UIImage(named: cover)?.averageColor
-                    } completion: { _ in }
-                }
+        if let cover = currentTrack?.cover {
+            UIView.animate(withDuration: 1, delay: 0.7) {
+                self.view.backgroundColor =  UIImage(named: cover)?.averageColor
+            } completion: { _ in }
+        }
     }
     
     @objc func backwardButtonAction() {
@@ -249,16 +248,38 @@ final class ViewController: UIViewController {
         if player.timeControlStatus == .paused {
             player.play()
             playPauseButton.setImage(UIImage(systemName: "pause.fill"), for: .normal)
-            //     add       enlagreCover()
+            transformToEnlarge()
         } else {
             player.pause()
             playPauseButton.setImage(UIImage(systemName: "play.fill"), for: .normal)
-            //      add      reduceCover()
+            transformToReduce()
+        }
+    }
+    
+    func transformToEnlarge() {
+        collectionView.decelerationRate = UIScrollView.DecelerationRate.fast
+        centerPoint = CGPoint(x: self.collectionView.frame.midX, y: self.collectionView.frame.midY)
+        collectionViewCenterPoint = self.view.convert(centerPoint, to: self.collectionView)
+        indexPath = self.collectionView.indexPathForItem(at: collectionViewCenterPoint)
+        
+        if let indexPath = indexPath {
+            self.centralCell = (self.collectionView.cellForItem(at: indexPath) as? CollectionViewCellTrack)
+            UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseOut) {
+                self.centralCell?.imageView.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+                self.centralCell?.imageView.layer.cornerRadius = 8
+            }
+            let generator = UIImpactFeedbackGenerator(style: .light)
+            generator.impactOccurred()
+        }
+    }
+    
+    func transformToReduce() {
+        UIView.animate(withDuration: 1, delay: 0, usingSpringWithDamping: 0.5, initialSpringVelocity: 1, options: .curveEaseOut) {
+        self.centralCell?.imageView.transform = CGAffineTransform.identity
         }
     }
     
     @objc func forwardButtonAction() {
-        
         guard let indexPath = indexPath, let indexPathItem = indexPathItem else { return }
         let nextIndexPath = IndexPath(item: indexPath.item + 1, section: 0)
         
@@ -362,7 +383,29 @@ extension ViewController: UICollectionViewDelegate, UICollectionViewDataSource, 
                 let currentTrack = self.dataSource[indexPath.item]
                 if self.currentTrack != currentTrack {
                     self.currentTrack = currentTrack
+                    if self.player.timeControlStatus == .playing {
+                        self.transformToEnlarge()
+                    }
                 }
+            }
+        }
+        
+        if self.player.timeControlStatus == .playing {
+            self.transformToEnlarge()
+        }
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView is UICollectionView else { return }
+        let centerPoint = CGPoint(x: self.collectionView.frame.size.width / 2 + scrollView.contentOffset.x,
+                                  y: self.collectionView.frame.size.height / 2 + scrollView.contentOffset.y)
+        
+        if let cell = self.centralCell {
+            let offsetX = centerPoint.x - cell.center.x
+            let switchOffset: CGFloat = UIScreen.main.bounds.width / 3
+            if offsetX < -switchOffset || offsetX > switchOffset {
+                    transformToReduce()
+                self.centralCell = nil
             }
         }
     }
