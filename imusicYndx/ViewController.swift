@@ -245,6 +245,7 @@ final class ViewController: UIViewController {
         self.centralCell?.imageView.transform = CGAffineTransform.identity
         }
     }
+    
     @objc func backwardButtonAction() {
         guard let indexPath = indexPath, let indexPathItem = indexPathItem else { return }
         switch indexPathItem {
@@ -424,20 +425,24 @@ extension ViewController {
         view.addSubview(containerViewButtons)
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width/3)*2).isActive = true
         
-        containerViewInfo.topAnchor.constraint(equalTo: collectionView.bottomAnchor).isActive = true
-        containerViewInfo.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        containerViewInfo.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        containerViewInfo.heightAnchor.constraint(equalToConstant: view.frame.height / 5).isActive = true
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: (UIScreen.main.bounds.width/3)*2),
+            
+            containerViewInfo.topAnchor.constraint(equalTo: collectionView.bottomAnchor),
+            containerViewInfo.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerViewInfo.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerViewInfo.heightAnchor.constraint(equalToConstant: view.frame.height / 5),
+            
+            containerViewButtons.topAnchor.constraint(equalTo: containerViewInfo.bottomAnchor),
+            containerViewButtons.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            containerViewButtons.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            containerViewButtons.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
         
-        containerViewButtons.topAnchor.constraint(equalTo: containerViewInfo.bottomAnchor).isActive = true
-        containerViewButtons.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        containerViewButtons.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        containerViewButtons.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
         setupContainerViewInfo()
         setupContainerViewButtons()
@@ -450,28 +455,32 @@ extension ViewController {
         containerViewInfo.addSubview(currentTimeLabel)
         containerViewInfo.addSubview(allTimeLabel)
         
-        artistTrackLabel.bottomAnchor.constraint(equalTo: progressTrackBar.topAnchor, constant: -18).isActive = true
-        artistTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8).isActive = true
-        artistTrackLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor).isActive = true
-        artistTrackLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
+        NSLayoutConstraint.activate([
+            artistTrackLabel.bottomAnchor.constraint(equalTo: progressTrackBar.topAnchor, constant: -18),
+            artistTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8),
+            artistTrackLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor),
+            artistTrackLabel.heightAnchor.constraint(equalToConstant: 20),
+            
+            nameTrackLabel.bottomAnchor.constraint(equalTo: artistTrackLabel.topAnchor, constant: -8),
+            nameTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8),
+            nameTrackLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor),
+            nameTrackLabel.heightAnchor.constraint(equalToConstant: 24),
+            
+            progressTrackBar.centerYAnchor.constraint(equalTo: containerViewInfo.centerYAnchor, constant: 10),
+            progressTrackBar.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8),
+            progressTrackBar.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor, constant: -8),
+            progressTrackBar.heightAnchor.constraint(equalToConstant: 4),
+            
+            currentTimeLabel.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 20),
+            currentTimeLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8),
+            currentTimeLabel.heightAnchor.constraint(equalToConstant: 10),
+            
+            allTimeLabel.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 20),
+            allTimeLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor, constant: -8),
+            allTimeLabel.heightAnchor.constraint(equalToConstant: 10)
+        ])
         
-        nameTrackLabel.bottomAnchor.constraint(equalTo: artistTrackLabel.topAnchor, constant: -8).isActive = true
-        nameTrackLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8).isActive = true
-        nameTrackLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor).isActive = true
-        nameTrackLabel.heightAnchor.constraint(equalToConstant: 24).isActive = true
         
-        progressTrackBar.centerYAnchor.constraint(equalTo: containerViewInfo.centerYAnchor, constant: 10).isActive = true
-        progressTrackBar.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8).isActive = true
-        progressTrackBar.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor, constant: -8).isActive = true
-        progressTrackBar.heightAnchor.constraint(equalToConstant: 4).isActive = true
-        
-        currentTimeLabel.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 20).isActive = true
-        currentTimeLabel.leadingAnchor.constraint(equalTo: containerViewInfo.leadingAnchor, constant: 8).isActive = true
-        currentTimeLabel.heightAnchor.constraint(equalToConstant: 10).isActive = true
-        
-        allTimeLabel.topAnchor.constraint(equalTo: progressTrackBar.bottomAnchor, constant: 20).isActive = true
-        allTimeLabel.trailingAnchor.constraint(equalTo: containerViewInfo.trailingAnchor, constant: -8).isActive = true
-        allTimeLabel.heightAnchor.constraint(equalToConstant: 10).isActive = true
     }
     
     private func setupContainerViewButtons() {
@@ -479,19 +488,44 @@ extension ViewController {
         containerViewButtons.addSubview(playPauseButton)
         containerViewButtons.addSubview(forwardButton)
         
-        playPauseButton.centerYAnchor.constraint(equalTo: containerViewButtons.centerYAnchor, constant: -10).isActive = true
-        playPauseButton.centerXAnchor.constraint(equalTo: containerViewButtons.centerXAnchor).isActive = true
-        playPauseButton.heightAnchor.constraint(equalToConstant: 80).isActive = true
-        playPauseButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         
-        backwardButton.trailingAnchor.constraint(equalTo: playPauseButton.leadingAnchor, constant: -20).isActive = true
-        backwardButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor).isActive = true
-        backwardButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        backwardButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        NSLayoutConstraint.activate([
+            playPauseButton.centerYAnchor.constraint(equalTo: containerViewButtons.centerYAnchor, constant: -10),
+            playPauseButton.centerXAnchor.constraint(equalTo: containerViewButtons.centerXAnchor),
+            playPauseButton.heightAnchor.constraint(equalToConstant: 80),
+            playPauseButton.widthAnchor.constraint(equalToConstant: 80),
+            
+            backwardButton.trailingAnchor.constraint(equalTo: playPauseButton.leadingAnchor, constant: -20),
+            backwardButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor),
+            backwardButton.heightAnchor.constraint(equalToConstant: 60),
+            backwardButton.widthAnchor.constraint(equalToConstant: 60),
+            
+            forwardButton.leadingAnchor.constraint(equalTo: playPauseButton.trailingAnchor, constant: 20),
+            forwardButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor),
+            forwardButton.heightAnchor.constraint(equalToConstant: 60),
+            forwardButton.widthAnchor.constraint(equalToConstant: 60)
+        ])
+    }
+}
+
+
+
+// MARK: - SwiftUI
+import SwiftUI
+
+struct VCProvider: PreviewProvider {
+    static var previews: some View {
+        ContainerView().edgesIgnoringSafeArea(.all)
+    }
+    
+    struct ContainerView: UIViewControllerRepresentable {
         
-        forwardButton.leadingAnchor.constraint(equalTo: playPauseButton.trailingAnchor, constant: 20).isActive = true
-        forwardButton.centerYAnchor.constraint(equalTo: playPauseButton.centerYAnchor).isActive = true
-        forwardButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        forwardButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        let viewController = ViewController()
+        
+        func makeUIViewController(context: Context) -> some UIViewController {
+            return viewController
+        }
+        func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) {
+        }
     }
 }
